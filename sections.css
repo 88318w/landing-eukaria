@@ -169,6 +169,8 @@ main.pagina { padding-top: clamp(7rem, 12vw, 10rem); }
 /* ---- página de proyectos: una columna vertical, un proyecto debajo del otro ---- */
 .columna { list-style: none; padding: 0 clamp(1rem, 4vw, 4rem); margin: 0 auto; max-width: 36rem; display: grid; gap: 2.5rem; }
 .proyecto { display: block; width: 100%; aspect-ratio: 473 / 637; padding: 0; border: 0; background: none; cursor: pointer; border-radius: var(--radius-sm); overflow: hidden; transition: scale 160ms var(--ease-out); }
+.proyecto img, .proyecto .ph { object-fit: cover; }
+.proyecto img { display: block; width: 100%; height: 100%; }
 .proyecto .ph { display: block; width: 100%; height: 100%; border-radius: 0; padding: 0; }
 .proyecto:active { scale: .98; }
 .columna .cover-nombre { margin-top: .875rem; }
