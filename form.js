@@ -3,7 +3,7 @@
   const form = document.getElementById("form");
   if (!form) return;
 
-  const EMAIL = "hola@ejemplo.com"; // TODO: el mail real del estudio
+  const EMAIL = "proyectos@eukaria.com";
   // TODO (opcional): URL de un servicio de formularios (Formspree, Netlify Forms...) que reciba un POST con JSON.
   // Si queda vacío, al enviar se abre el programa de correo de la persona con el mensaje ya armado.
   const ENDPOINT = "";
