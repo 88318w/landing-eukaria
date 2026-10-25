@@ -1,0 +1,5 @@
+# sistema y herramientas locales
+desktop.ini
+.claude/
+node_modules/
+.DS_Store

@@ -1,0 +1,175 @@
+/* ============================
+   SECCIONES: Trabajo, About, Contacto (bocetos con placeholders)
+============================ */
+.section { padding-block: clamp(5rem, 11vw, 9rem); }
+.inner { max-width: 80rem; margin-inline: auto; }
+section[id] { scroll-margin-top: 4rem; }
+.section h2 { font-size: clamp(2rem, 5vw, 4.5rem); font-weight: 700; line-height: 1; letter-spacing: -.04em; }
+.lead { max-width: 52ch; margin-top: 1.25rem; font-size: 1.125rem; }
+
+/* entrada al hacer scroll: fundido + subida corta (igual que las piezas del portfolio) */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal { opacity: 0; translate: 0 24px; transition: opacity .6s var(--ease-out), translate .6s var(--ease-out); transition-delay: var(--d, 0ms); }
+  .js .reveal.in { opacity: 1; translate: 0 0; }
+}
+
+/* ---- placeholders: se reemplazan por imágenes reales ---- */
+.ph { display: grid; place-items: center; text-align: center; padding: 1rem; overflow: hidden; border-radius: var(--radius-sm); color: var(--color-ink-950);
+  font-size: .8125rem; letter-spacing: .08em; text-transform: uppercase;
+  background: repeating-linear-gradient(135deg, rgb(17 17 29 / .07) 0 12px, transparent 12px 24px), var(--c, var(--color-blush-100)); }
+.ph.oscuro { color: var(--color-blush-100); }
+
+/* ---- Trabajo: carrusel infinito de portadas (473 x 637, como en el mockup) ---- */
+.work { padding-block: clamp(2rem, 5vw, 4rem) 0; }
+.marquee { overflow: hidden; padding-block: max(4vw, 2.5rem); cursor: grab; touch-action: pan-y; } /* se agarra y se arrastra (galeria.js); pan-y deja pasar el scroll vertical en el celular */
+.marquee.agarrando, .marquee.agarrando * { cursor: grabbing; user-select: none; }
+.cover img { -webkit-user-drag: none; } /* el aire de arriba y abajo deja crecer la portada al pasar el mouse */
+.pista { display: flex; width: max-content; list-style: none; padding: 0; }
+.pista li { flex: none; margin-right: 1.25rem; } /* margen (no gap) para que -50% empalme justo */
+.pista.corre { animation: correr 70s linear infinite; }
+@keyframes correr { to { transform: translateX(-50%); } }
+
+/* proporción 473 x 637; en escritorio ~27 vw de ancho (antes 23,65) y en celular 74 vw, para que los proyectos sean protagonistas */
+.cover { position: relative; display: block; width: max(27vw, 14rem); aspect-ratio: 473 / 637; padding: 0; border: 0; background: none; cursor: pointer; border-radius: var(--radius-sm); overflow: hidden; transition: scale 500ms var(--ease-spring); }
+.cover img, .cover .ph { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cover .ph { border-radius: 0; padding: 0; }
+@media (hover: hover) and (pointer: fine) { .cover:hover { scale: 1.15; z-index: 2; } }
+.cover:focus-visible { scale: 1.15; z-index: 2; }
+.cover:active { scale: 1.1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; }
+  .pista.corre { animation: none; }
+  .clon { display: none; }
+  .cover { transition: none; }
+}
+
+/* ---- página del proyecto: las imágenes de ESE trabajo, en una composición que se recorre con scroll ---- */
+body.galeria-abierta { overflow: hidden; }
+dialog#galeria { padding: 0; border: 0; max-width: none; max-height: none; width: 100vw; height: 100dvh; background: var(--color-paper); color: var(--color-ink-950); overscroll-behavior: contain; }
+dialog#galeria[open] { display: block; overflow-y: auto; transform-origin: var(--ox, 50%) var(--oy, 50%); animation: galeria-entra 350ms var(--ease-out) both; }
+dialog#galeria.saliendo { opacity: 0; scale: .97; transition: opacity 200ms ease, scale 200ms ease; }
+dialog#galeria::backdrop { background: var(--color-paper); }
+@keyframes galeria-entra { from { opacity: 0; scale: .94; } }
+@media (prefers-reduced-motion: reduce) { @keyframes galeria-entra { from { opacity: 0; } } dialog#galeria.saliendo { scale: 1; } }
+
+.g-contenido { display: grid; gap: 1.25rem; max-width: 90rem; margin-inline: auto; padding: 6rem clamp(1rem, 4vw, 4rem) 5rem; }
+.g-cabecera { display: grid; gap: 2.5rem; padding-bottom: 2.5rem; }
+.g-cabecera h2 { max-width: 14ch; font-size: clamp(2.25rem, 6vw, 5.5rem); font-weight: 700; line-height: .98; letter-spacing: -.04em; }
+.g-datos { display: grid; gap: 1.5rem 4rem; }
+.g-etiqueta { margin-bottom: .35rem; font-size: .8125rem; letter-spacing: .08em; text-transform: uppercase; color: var(--color-gray-60); }
+.g-servicio { font-weight: 700; }
+.g-bajada { max-width: 52ch; font-size: 1.125rem; }
+@media (min-width: 900px) { .g-datos { grid-template-columns: 1fr 2fr; align-items: start; } }
+.g-fila { display: flex; align-items: flex-start; gap: 1.25rem; }
+.g-item { flex: var(--r) 1 0; min-width: 0; aspect-ratio: var(--r); }
+.g-item .ph, .g-item img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
+@media (max-width: 899px) {
+  .g-fila { flex-direction: column; }
+  .g-item { flex: none; width: 100%; }
+}
+
+.g-cerrar { position: fixed; z-index: 3; top: 1.25rem; right: clamp(1rem, 4vw, 4rem); width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: inherit; background: color-mix(in srgb, var(--color-paper) 88%, transparent); transition: scale 160ms var(--ease-out); }
+.g-cerrar:active { scale: .9; }
+.g-cerrar span { grid-area: 1 / 1; width: 1.6rem; height: 2px; background: currentColor; }
+.g-cerrar span:first-child { rotate: 45deg; }
+.g-cerrar span:last-child { rotate: -45deg; }
+
+/* ---- About: mismo esquema que la página de referencia (intro con foto + lista de servicios) ---- */
+.about-intro { display: grid; gap: 3rem; }
+.about-izq { display: flex; flex-direction: column; justify-content: space-between; gap: 3rem; }
+.about-titulo { font-size: clamp(2.25rem, 5.2vw, 5rem); font-weight: 500; line-height: .95; letter-spacing: -.04em; text-transform: uppercase; }
+.about-titulo span { display: block; }
+.about-texto { max-width: 24rem; font-size: .9375rem; }
+.about-foto .ph { aspect-ratio: 5 / 7; width: 100%; padding: 0; }
+
+.about-servicios { display: grid; gap: 1.5rem; margin-top: clamp(5rem, 11vw, 9rem); }
+.serv-etiqueta { font-size: .875rem; letter-spacing: .08em; text-transform: uppercase; }
+.serv-lista { list-style: none; padding: 0; font-size: clamp(1.75rem, 3.4vw, 3rem); line-height: 1.08; letter-spacing: -.03em; }
+.serv-cta { justify-self: start; margin-top: 2.5rem; font-size: .875rem; letter-spacing: .04em; text-transform: uppercase; }
+
+@media (min-width: 900px) {
+  .about-intro { grid-template-columns: minmax(0, 1fr) minmax(0, 31%); gap: 4rem; }
+  .about-servicios { grid-template-columns: minmax(0, .37fr) minmax(0, .63fr); }
+}
+
+/* ---- Contacto: formulario ---- */
+.contact-grid { display: grid; gap: 3rem 6rem; }
+.contact-grid .nota { margin-top: 2rem; color: var(--color-gray-60); font-size: .9375rem; }
+.nota a { color: var(--color-ink-950); text-underline-offset: .25em; }
+@media (min-width: 900px) { .contact-grid { grid-template-columns: 1fr 1.1fr; align-items: start; } }
+
+form { max-width: 36rem; }
+.field { display: grid; gap: .5rem; margin-bottom: 1.5rem; }
+label { font-size: .875rem; letter-spacing: .04em; text-transform: uppercase; }
+input, select, textarea { width: 100%; min-height: 3rem; padding: .8rem 1rem; font: inherit; font-size: 1rem; color: inherit; background: transparent; border: 1px solid var(--color-ink-950); border-radius: var(--radius-sm); transition: border-color var(--duration-fast), box-shadow var(--duration-fast); }
+textarea { min-height: 9rem; resize: vertical; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--color-indigo-900); outline-offset: 2px; }
+[aria-invalid="true"] { border-color: var(--color-red-600); box-shadow: inset 0 0 0 1px var(--color-red-600); }
+.error { color: var(--color-red-600); font-size: .875rem; }
+.error[hidden] { display: none; }
+/* el error aparece con fundido + bajada de 4px (se reinicia cada vez que el campo pasa a tener error) */
+@media (prefers-reduced-motion: no-preference) { .error:not([hidden]) { animation: error-entra 200ms var(--ease-out) both; } }
+@keyframes error-entra { from { opacity: 0; translate: 0 -4px; } }
+.help { color: var(--color-gray-60); font-size: .875rem; }
+
+.btn-solid { display: inline-flex; align-items: center; justify-content: center; min-height: 3rem; padding: 0 2rem; font: inherit; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; color: var(--color-paper); background: var(--color-ink-950); border: 1px solid var(--color-ink-950); border-radius: var(--radius-sm); transition: background var(--duration-fast), color var(--duration-fast), scale 160ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .btn-solid:hover { background: transparent; color: var(--color-ink-950); } }
+.btn-solid:active { scale: .97; }
+.btn-solid:disabled { opacity: .6; cursor: progress; }
+.status { margin-top: 1rem; min-height: 1.5rem; font-size: .9375rem; }
+
+/* ============================
+   HOME: estructura inspirada en la referencia, adaptada a Eukaria
+============================ */
+/* texto de presentación centrado */
+.intro { padding-block: clamp(4rem, 9vw, 8rem) 0; text-align: center; }
+.intro-texto { max-width: 38rem; margin: 0 auto; font-size: .9375rem; }
+
+/* nombre debajo de cada portada */
+.cover-nombre { margin-top: .875rem; font-size: .875rem; letter-spacing: .06em; text-transform: uppercase; }
+
+/* contacto: título grande + formulario, y debajo los datos */
+.contact-titulo { font-size: clamp(2.25rem, 5.2vw, 5rem); font-weight: 500; line-height: .95; letter-spacing: -.04em; text-transform: uppercase; }
+.contact-titulo .flecha { font-weight: 400; }
+
+/* ---- páginas internas (About, Contacto): dejan lugar para la barra fija ---- */
+main.pagina { padding-top: clamp(7rem, 12vw, 10rem); }
+.pagina .section { padding-top: 0; }
+
+/* ---- pie: la línea ocupa todo el ancho de la pantalla; el contenido queda dentro de los márgenes ---- */
+.pie { margin-top: clamp(5rem, 10vw, 9rem); border-top: 1px solid color-mix(in srgb, var(--color-ink-950) 25%, transparent); }
+.pie-grid { display: grid; gap: 3rem; padding-block: clamp(2.5rem, 5vw, 4.5rem); }
+.pie-cta { font-size: clamp(2.25rem, 5.2vw, 5rem); font-weight: 500; line-height: .95; letter-spacing: -.04em; text-transform: uppercase; text-decoration: none; }
+.pie-cta .flecha { display: inline-block; font-weight: 400; transition: translate 300ms var(--ease-spring); }
+@media (hover: hover) and (pointer: fine) { .pie-cta:hover .flecha { translate: .15em -.15em; } }
+.pie-datos { display: grid; gap: 1.5rem 3rem; align-content: start; font-size: .9375rem; }
+.pie-datos img { grid-column: 1 / -1; height: 1.75rem; width: auto; }
+.pie-datos address { font-style: normal; }
+.pie-datos a { text-underline-offset: .25em; }
+.pie-datos .copy { grid-column: 1 / -1; color: var(--color-gray-60); font-size: .875rem; }
+.redes { list-style: none; padding: 0; display: grid; gap: .25rem; }
+@media (min-width: 900px) { .pie-grid { grid-template-columns: 1.2fr 1fr; } .pie-datos { grid-template-columns: 1fr 1fr; } .pie-simple .pie-grid { grid-template-columns: 1fr; } .pie-simple .pie-datos { max-width: 40rem; } }
+
+@media (max-width: 899px) { .cover { width: 74vw; } .pista li { margin-right: 1rem; } }
+
+/* ---- pie compacto: logo + íconos de redes en una fila, mail + © en la siguiente ---- */
+.pie-datos { grid-template-columns: 1fr auto; gap: .25rem 1rem; align-items: center; }
+.pie-datos img { grid-column: auto; height: 1.5rem; }
+.pie-datos address { grid-column: 1; }
+.pie-datos .redes { grid-column: 2; grid-row: 1; display: flex; gap: .25rem; margin-right: -.6875rem; }
+.pie-datos .copy { grid-column: 2; text-align: right; }
+.redes a { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; color: var(--color-ink-950); transition: scale 160ms var(--ease-out); }
+.redes a:active { scale: .92; }
+@media (hover: hover) and (pointer: fine) { .redes a:hover { scale: 1.1; } }
+.pie-grid { padding-block: clamp(2rem, 4vw, 3.5rem); gap: 1.75rem; }
+@media (max-width: 899px) { .pie { margin-top: 3.5rem; } }
+@media (min-width: 900px) { .pie-datos { grid-template-columns: 1fr auto; align-self: end; } }
+
+/* ---- página de proyectos: una columna vertical, un proyecto debajo del otro ---- */
+.columna { list-style: none; padding: 0 clamp(1rem, 4vw, 4rem); margin: 0 auto; max-width: 36rem; display: grid; gap: 2.5rem; }
+.proyecto { display: block; width: 100%; aspect-ratio: 473 / 637; padding: 0; border: 0; background: none; cursor: pointer; border-radius: var(--radius-sm); overflow: hidden; transition: scale 160ms var(--ease-out); }
+.proyecto .ph { display: block; width: 100%; height: 100%; border-radius: 0; padding: 0; }
+.proyecto:active { scale: .98; }
+.columna .cover-nombre { margin-top: .875rem; }
+@media (prefers-reduced-motion: reduce) { .proyecto { transition: none; } }

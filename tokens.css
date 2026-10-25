@@ -1,0 +1,99 @@
+/* Eukaria — design tokens (fuente: Manual de Marca 2026.00) */
+
+/* === PRIMITIVES === */
+:root {
+  /* Color: rojo de marca (#c8161a, manual p.11) + escala de grises (p.13) */
+  --color-red-600: #c8161a;
+  /* Resto de la paleta: muestreada de la p.12 del PDF (el manual rotula todos con el hex del rojo por error) */
+  --color-cyan-300: #85d6d6;
+  --color-blue-400: #57b0e3;
+  --color-indigo-900: #372766;
+  --color-violet-300: #9083c9;
+  --color-blush-100: #f5e7e3;
+  --color-ink-950: #11111d;
+  --color-paper: #f2efeb; /* fondo del hero (mockup) */
+  --color-cream-100: #efe8e1; /* fondo de las láminas del manual */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-90: #1a1a1a;
+  --color-gray-80: #333333;
+  --color-gray-70: #4d4d4d;
+  --color-gray-60: #666666;
+  --color-gray-50: #808080;
+  --color-gray-40: #999999;
+  --color-gray-30: #b3b3b3;
+  --color-gray-20: #cccccc;
+
+  /* Tipografía: primaria IBM Plex Mono; secundaria Gaussian Blur Italic (logo/acentos) */
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-accent: "Gaussian Blur Italic", "IBM Plex Mono", serif; /* ponytail: fuente sin web-font aún, sumar @font-face con el archivo */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 2rem;
+  --font-size-2xl: 3.5rem;
+
+  /* Spacing (base 4px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-16: 4rem;
+  --space-32: 8rem;
+
+  /* Radio: estética de laboratorio, esquinas casi rectas */
+  --radius-sm: 2px;
+  --radius-default: 4px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* movimiento en pantalla (del portfolio) */
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+}
+
+/* === SEMANTIC === */
+:root {
+  --color-background: var(--color-ink-950);
+  --color-foreground: var(--color-blush-100);
+  --color-primary: var(--color-red-600);
+  --color-primary-foreground: var(--color-white);
+  --color-accent-cool: var(--color-cyan-300);
+  --color-accent-deep: var(--color-indigo-900);
+  --color-accent-soft: var(--color-violet-300);
+  --color-muted: var(--color-gray-90);
+  --color-muted-foreground: var(--color-gray-40);
+  --color-border: var(--color-gray-80);
+
+  --font-body: var(--font-mono);
+  --font-heading: var(--font-mono);
+  --spacing-section: var(--space-32);
+  --spacing-component: var(--space-6);
+}
+
+/* Variante clara (positivo en tinta plana, manual p.12) */
+[data-theme="light"] {
+  --color-background: var(--color-cream-100);
+  --color-foreground: var(--color-ink-950);
+  --color-muted: var(--color-blush-100);
+  --color-muted-foreground: var(--color-gray-60);
+  --color-border: var(--color-gray-20);
+}
+
+/* === COMPONENTS === */
+:root {
+  --button-bg: var(--color-primary);
+  --button-fg: var(--color-primary-foreground);
+  --button-hover-bg: var(--color-foreground);
+  --button-hover-fg: var(--color-background);
+  --button-padding-x: var(--space-6);
+  --button-padding-y: var(--space-2);
+  --button-radius: var(--radius-sm);
+
+  --card-bg: var(--color-muted);
+  --card-border: var(--color-border);
+  --card-padding: var(--space-6);
+  --card-radius: var(--radius-default);
+}

@@ -1,0 +1,189 @@
+@font-face { font-family: "IBM Plex Mono"; font-weight: 400; font-display: swap; src: url(fonts/plex-mono-400.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: swap; src: url(fonts/plex-mono-500.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: swap; src: url(fonts/plex-mono-700.woff2) format("woff2"); }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body { background: var(--color-paper); color: var(--color-ink-950); font: 400 1rem/1.6 var(--font-body); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--color-indigo-900); outline-offset: 3px; }
+
+.pad { padding-inline: clamp(1rem, 4vw, 4rem); }
+#tope { position: absolute; top: 0; left: 0; width: 1px; height: 40px; pointer-events: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---- animaciones del portfolio: entrada de la página (fundido + subida corta) ---- */
+@keyframes pagina-entra { from { opacity: 0; transform: translateY(10px); } }
+@keyframes img-aparece { from { opacity: 0; } to { opacity: 1; } }
+
+/* ============================
+   HERO: menú + logo 3D + etiqueta arrastrable
+============================ */
+.hero { --zona-texto: 8rem; /* franja de abajo reservada para el texto y la flecha */ position: relative; min-height: max(100svh, 34rem); overflow: hidden; touch-action: pan-y; }
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 10; height: 6.5rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; font-size: clamp(.875rem, 1.05vw, 1.1rem); letter-spacing: .04em; text-transform: uppercase; }
+.nav ul { display: flex; gap: clamp(1rem, 2.5vw, 2.5rem); list-style: none; padding: 0; }
+.nav a { text-decoration: none; }
+.nav ul a { display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 400; }
+.nav ul a.activo { font-weight: 700; } /* la sección donde estás va en bold (lo marca nav.js) */
+@media (hover: hover) and (pointer: fine) {
+  .nav ul a:hover { text-decoration: underline; text-underline-offset: .4em; }
+}
+.nav-logo img { height: clamp(1.75rem, 3.4vw, 3.4rem); width: auto; }
+
+/* botón: al presionarlo se achica apenas (igual que los botones del portfolio) */
+.btn-out { justify-self: end; display: inline-flex; align-items: center; min-height: 2.75rem; border: 1px solid currentColor; padding: 0 1.4em; white-space: nowrap; transition: background var(--duration-fast), color var(--duration-fast), scale 160ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .btn-out:hover { background: var(--color-ink-950); color: var(--color-paper); }
+}
+.btn-out:active { scale: .97; }
+
+/* los elementos del menú entran con fundido + subida corta al cargar */
+@media (prefers-reduced-motion: no-preference) {
+  .nav-logo, .nav-der { animation: pagina-entra .28s var(--ease-spring) .05s both; }
+}
+
+/* al bajar, la barra se vuelve sólida del color de la página y se desvanece hacia abajo, sin corte
+   (nav.js agrega .con-fondo). Sólido a la altura de la barra; después el degradé baja suave */
+.nav { --barra: 6.5rem; --fade: 3.5rem; }
+.nav::after { content: ""; position: absolute; inset: 0 0 auto 0; height: calc(var(--barra) + var(--fade)); z-index: -1; pointer-events: none; opacity: 0; transition: opacity .25s ease;
+  background: linear-gradient(to bottom,
+    rgb(242 239 235 / 1) 0, rgb(242 239 235 / 1) var(--barra),
+    rgb(242 239 235 / .95) calc(var(--barra) + var(--fade) * .12),
+    rgb(242 239 235 / .8) calc(var(--barra) + var(--fade) * .26),
+    rgb(242 239 235 / .6) calc(var(--barra) + var(--fade) * .4),
+    rgb(242 239 235 / .4) calc(var(--barra) + var(--fade) * .54),
+    rgb(242 239 235 / .23) calc(var(--barra) + var(--fade) * .67),
+    rgb(242 239 235 / .1) calc(var(--barra) + var(--fade) * .8),
+    rgb(242 239 235 / .03) calc(var(--barra) + var(--fade) * .91),
+    rgb(242 239 235 / 0) calc(var(--barra) + var(--fade))); }
+.nav.con-fondo::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .nav::after { transition: none; } }
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) { .nav > ul { animation: pagina-entra .28s var(--ease-spring) .05s both; } }
+
+/* texto del hero: justo debajo del logo 3D, centrado, visible sin hacer scroll */
+.hero-texto { position: absolute; z-index: 2; left: 50%; bottom: 4.9rem; width: min(52rem, calc(100% - 2rem)); translate: -50% 0; text-align: center; font-size: .875rem; font-weight: 500; line-height: 1.5; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) { .hero-texto { animation: pagina-entra .28s var(--ease-spring) .35s both; } }
+@media (max-width: 899px) { .hero-texto { bottom: 5.75rem; font-size: .875rem; } }
+
+/* flecha de scroll (mockup): chevron dibujado con CSS, abajo al centro */
+.chev { position: absolute; z-index: 2; left: 50%; bottom: 1.5rem; width: 3rem; height: 3rem; margin-left: -1.5rem; display: grid; place-items: center; }
+.chev::before { content: ""; width: 1.1rem; height: 1.1rem; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-2px, -2px); }
+@media (prefers-reduced-motion: no-preference) {
+  .chev::before { animation: rebota 1.6s ease-in-out infinite; }
+  @keyframes rebota { 50% { transform: rotate(45deg) translate(2px, 2px); } }
+}
+
+/* ---- logo 3D: se agarra y se gira; touch-action deja pasar el scroll vertical en el celular ---- */
+#stage { position: absolute; inset: 0; z-index: 1; pointer-events: none; } /* el lienzo ocupa todo el hero para que el logo no se corte al girar */
+#stage canvas { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity 700ms var(--ease-out); }
+#stage.listo canvas { opacity: 1; }
+.hero.sobre-logo { cursor: grab; }
+.hero.agarrando { cursor: grabbing; user-select: none; }
+@media (prefers-reduced-motion: reduce) { #stage canvas { transition: none; } }
+
+/* ---- etiqueta arrastrable (comportamiento en sticker.js, adaptado del portfolio) ---- */
+.sticker { position: absolute; z-index: 2; left: 17%; top: calc((100% - var(--zona-texto)) * .56); width: max(min(28vw, 52dvh), 11rem); height: auto; max-width: none; cursor: default; touch-action: none; user-select: none; -webkit-user-drag: none; transition: transform .6s var(--ease-spring), scale 200ms var(--ease-out); animation: img-aparece 300ms var(--ease-out), balanceo 5.2s ease-in-out infinite alternate; }
+/* al agarrarla se "levanta" apenas; mientras arrastrás, la inclinación responde sin demora */
+.sticker.is-dragging { z-index: 4; scale: 1.03; transition: scale 150ms var(--ease-out); animation-play-state: paused; }
+@keyframes balanceo { from { rotate: -1.5deg; } to { rotate: 1.5deg; } }
+
+/* ============================
+   TELÉFONO (< 900px): barra con logo + hamburguesa, y el menú a pantalla completa
+   (mismo sistema que el portfolio)
+============================ */
+.menu-btn, .menu-cta { display: none; }
+
+@media (max-width: 899px) {
+  :root { --m-bar: 4.5rem; }
+
+  .nav { height: var(--m-bar); grid-template-columns: 1fr auto; }
+  .nav-der .btn-out { display: none; } /* el botón vive abajo, dentro del menú */
+  .nav-logo, .nav-der { position: relative; z-index: 3; }
+
+  .nav { --barra: var(--m-bar); }
+
+  /* hamburguesa: 3 rayitas que se convierten en X al abrir */
+  .menu-btn { display: flex; flex-direction: column; justify-content: center; gap: 6px; justify-self: end; width: 2.75rem; height: 2.75rem; padding: 0 .5rem; margin-right: -.5rem; border: 0; background: none; color: inherit; cursor: pointer; }
+  .menu-btn span { display: block; width: 100%; height: 2px; background: currentColor; transition: transform 200ms var(--ease-out), opacity 150ms var(--ease-out); }
+  body.menu-open .menu-btn span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  body.menu-open .menu-btn span:nth-child(2) { opacity: 0; }
+  body.menu-open .menu-btn span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  /* menú a pantalla completa: fundido + baja apenas */
+  .nav > ul { position: fixed; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: flex-start; gap: 0; padding: calc(var(--m-bar) + 2rem) 1.2rem 8rem; background: var(--color-paper); overflow-y: auto;
+    opacity: 0; visibility: hidden; transform: translateY(-.6rem); transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s; }
+  body.menu-open { overflow: hidden; }
+  body.menu-open .nav > ul { opacity: 1; visibility: visible; transform: none; transition: opacity .25s ease, transform .25s ease, visibility 0s; }
+  .nav ul a { width: 100%; min-height: 3.25rem; font-size: 2rem; line-height: 1.2; transition: scale 160ms var(--ease-out); }
+  .nav ul a:active { scale: .97; transform-origin: left center; }
+
+  /* al abrir, los textos bajan en cascada (se reinicia cada vez que abrís el menú) */
+  body.menu-open .nav > ul > li:not(.menu-cta) { animation: menu-texto-baja 300ms var(--ease-out) both; }
+  body.menu-open .nav > ul > li:nth-child(1) { animation-delay: 0s; }
+  body.menu-open .nav > ul > li:nth-child(3) { animation-delay: .04s; }
+  body.menu-open .nav > ul > li:nth-child(4) { animation-delay: .08s; }
+  body.menu-open .nav > ul > li:nth-child(5) { animation-delay: .12s; }
+  @keyframes menu-texto-baja { from { opacity: 0; transform: translateY(-.8rem); } }
+
+  /* el botón de abajo hace lo contrario: sube desde el borde de abajo (el menú se arma desde los dos bordes) */
+  .menu-cta { display: block; position: absolute; left: 1.2rem; right: 1.2rem; bottom: 1.2rem; }
+  .menu-cta .btn-out { width: 100%; justify-content: center; font-size: 1rem; }
+  body.menu-open .menu-cta { animation: menu-boton-sube 300ms var(--ease-out) .12s both; }
+  @keyframes menu-boton-sube { from { opacity: 0; transform: translateY(.8rem); } }
+
+  .hero { --zona-texto: 14rem; }
+  .sticker { left: 4%; top: calc((100% - var(--zona-texto)) * .6); width: 60vw; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-btn span { transition: none; }
+    .nav > ul { transform: none; }
+    body.menu-open .nav > ul > li, body.menu-open .menu-cta { animation: none; }
+  }
+}
+@media (prefers-reduced-motion: reduce) { .sticker { animation: none; } .sticker.is-dragging { scale: 1.01; } }
+
+/* ---- transición entre páginas (la del portfolio): la vieja se va rápido y la nueva entra con fundido + subida corta.
+        Navegadores sin soporte simplemente cambian de página ---- */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: pagina-sale .15s ease-out both; }
+::view-transition-new(root) { animation: pagina-entra .28s var(--ease-spring) .05s both; }
+@keyframes pagina-sale { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { ::view-transition-old(root), ::view-transition-new(root) { animation: none; } }
+
+/* ============================
+   CELULAR (< 900px): composición propia, no el escritorio achicado
+============================ */
+:root { --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); } /* muescas y barra de gestos del iPhone */
+a, button, select, label { touch-action: manipulation; -webkit-tap-highlight-color: transparent; } /* sin demora de 300 ms ni destello gris al tocar */
+@media (max-width: 899px) {
+  .nav { height: calc(var(--m-bar) + var(--safe-top)); padding-top: var(--safe-top); --barra: calc(var(--m-bar) + var(--safe-top)); }
+  .nav > ul { padding-top: calc(var(--m-bar) + var(--safe-top) + 2rem); }
+  .menu-cta { bottom: calc(1.2rem + var(--safe-bottom)); }
+
+  /* portada: logo 3D parado y grande, etiqueta cruzándolo, texto y botón abajo (a mano del pulgar) */
+  .hero { --zona-texto: 10.5rem; }
+  .chev { bottom: calc(.75rem + var(--safe-bottom)); }
+  .hero-texto { bottom: calc(4.5rem + var(--safe-bottom)); }
+  .sticker { top: calc((100% - var(--zona-texto)) * .66); width: 62vw; }
+
+  .about-foto .ph { aspect-ratio: 4 / 5; }
+  .pie-datos address a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+}
+
+/* "Our work" del menú: en el celular lleva a la página de proyectos; en escritorio, al carrusel de la landing */
+.solo-celular { display: none; }
+@media (max-width: 899px) { .solo-celular { display: block; } .solo-escritorio { display: none; } }
+
+/* ---- cinta negra (segunda etiqueta arrastrable): arriba a la derecha, cruzando el logo 3D como en el mockup ---- */
+.sticker.cinta { left: 61.3%; top: 8.7%; width: min(23.7vw, 52dvh); animation-delay: 0s, -2.6s; } /* el balanceo arranca desfasado del de la otra etiqueta */
+@media (max-width: 899px) { .sticker.cinta { left: 51%; top: 15%; width: 46vw; } }
+
+/* ---- grupo de la derecha del menú: botón de idioma + (hamburguesa en celular | presupuesto en escritorio) ---- */
+.nav-der { justify-self: end; display: flex; align-items: center; gap: 1rem; }
+.lang { display: inline-flex; align-items: center; gap: .35em; min-height: 2.75rem; padding: 0 .25rem; border: 0; background: none; color: inherit; font: inherit; letter-spacing: .04em; cursor: pointer; transition: scale 160ms var(--ease-out); }
+.lang [data-lang] { opacity: .5; transition: opacity 160ms var(--ease-out); }
+html[lang="es"] .lang [data-lang="es"], html[lang="en"] .lang [data-lang="en"] { opacity: 1; font-weight: 700; }
+@media (hover: hover) and (pointer: fine) { .lang:hover [data-lang] { opacity: 1; } }
+.lang:active { scale: .95; }
+@media (max-width: 899px) { .nav-der { gap: .25rem; } .menu-btn { margin-right: -.5rem; } }
